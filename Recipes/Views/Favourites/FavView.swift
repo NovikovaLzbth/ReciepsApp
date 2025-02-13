@@ -8,17 +8,25 @@
 import SwiftUI
 
 struct FavView: View {
-    
     var body: some View {
         NavigationStack {
             ZStack {
-                ScrollView (.vertical) {
+                ScrollView(.vertical) {
                     VStack {
+                        
                     }
-                    .navigationBarTitle(Text("Избранное"))
                 }
             }
-            
+            .navigationTitle("Избранное")
+            .toolbar {
+                Button {
+                    // Действие для кнопки "trash"
+                } label: {
+                    Label("", systemImage: "trash")
+                }
+            }
         }
     }
 }
+
+

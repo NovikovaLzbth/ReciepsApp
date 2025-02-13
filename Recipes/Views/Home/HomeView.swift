@@ -15,22 +15,36 @@ struct HomeView: View {
             VStack {
                 VStack {
                     ScrollView(.vertical) {
-                        Text("Hello, World!")
                     }
                 }
                 ZStack {
                     NavigationLink(destination: AddendumView(), label: {
-                        Label("", systemImage: "plus.square.dashed")
-                            .scaleEffect(3)
+                        Label("", systemImage: "plus.circle.dashed")
+                            .scaleEffect(2.8)
                             .colorMultiply(.black)
-                            .frame()
+                            .position(x: 340, y: 220)
                     })
                 }
             }
-            .navigationBarTitle(Text("Меню"))
-            
+            .navigationBarTitle(Text("Все рецепты"))
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Menu {
+                        Menu("Сортировать") {
+                            Button("Без сортировки", action: {})
+                            
+                            Button("", action: {})
+                            
+                            Button("По дате", action: {})
+                        }
+                        
+                        Button("Удалить все", action: {})
+                    } label: {
+                        Label("", systemImage: "ellipsis")
+                    }
+                }
+            }
         }
-        
     }
 }
 

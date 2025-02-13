@@ -9,6 +9,8 @@ import SwiftUI
 
 struct SearchView: View {
     
+    @State private var searchText = ""
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -21,5 +23,6 @@ struct SearchView: View {
             }
             
         }
+        .searchable(text: $searchText, prompt: "Найти")
     }
 }
