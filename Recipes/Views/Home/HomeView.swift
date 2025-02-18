@@ -11,6 +11,8 @@ import CoreData
 struct HomeView: View {
     @StateObject private var viewModel: HomeViewModel
     
+    @State private var searchText = ""
+    
     init(imageStorage: ImageStorage) {
         _viewModel = StateObject(wrappedValue: HomeViewModel(imageStorage: imageStorage))
     }
@@ -25,6 +27,7 @@ struct HomeView: View {
             VStack {
                 VStack {
                     ScrollView(.vertical) {
+                        
 //                        if viewModel.url != nil {
 //                            Image("pngwing.png")
 //                                .resizable()
@@ -46,6 +49,7 @@ struct HomeView: View {
 //                        }
                     }
                 }
+                
                 ZStack {
                     NavigationLink {
                         AddendumView(imageStorage: viewModel.imageStorage)
@@ -55,9 +59,9 @@ struct HomeView: View {
                             .foregroundStyle(.gray)
                             .position(x: 340, y: 220)
                     }
-                    
                 }
             }
+            
             .navigationBarTitle(Text("Все рецепты"))
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
