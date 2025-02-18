@@ -9,21 +9,53 @@ import SwiftUI
 import CoreData
 
 struct HomeView: View {
+    @StateObject private var viewModel: HomeViewModel
+    
+    init(imageStorage: ImageStorage) {
+        _viewModel = StateObject(wrappedValue: HomeViewModel(imageStorage: imageStorage))
+    }
+    
+    let colomn = [
+        GridItem(.fixed(160)),
+        GridItem(.fixed(160))
+    ]
     
     var body: some View {
         NavigationStack {
             VStack {
                 VStack {
                     ScrollView(.vertical) {
+//                        if viewModel.url != nil {
+//                            Image("pngwing.png")
+//                                .resizable()
+//                                .scaledToFit ()
+//                        } else {
+//                            LazyVGrid(columns: colomn, alignment: .center) {
+//                                if let image = viewModel.uiImage {
+//                                    Image(uiImage: image)
+//                                        .resizable()
+//                                        .scaledToFit()
+//                                        .cornerRadius(10)
+//                                        .overlay{
+//                                            RoundedRectangle(cornerRadius: 10)
+//                                                .stroke(.black, lineWidth: 3)
+//                                        }
+//                                        .padding(16)
+//                                }
+//                            }
+//                        }
                     }
                 }
                 ZStack {
-                    NavigationLink(destination: AddendumView(), label: {
+                    NavigationLink {
+                        AddendumView(imageStorage: viewModel.imageStorage)
+                    } label: {
                         Label("", systemImage: "plus.circle.dashed")
                             .scaleEffect(2.8)
-                            .colorMultiply(.black)
+                            .foregroundStyle(.gray)
                             .position(x: 340, y: 220)
-                    })
+                    }
+                    
                 }
             }
             .navigationBarTitle(Text("Все рецепты"))
@@ -31,11 +63,9 @@ struct HomeView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     Menu {
                         Menu("Сортировать") {
-                            Button("Без сортировки", action: {})
-                            
-                            Button("", action: {})
-                            
                             Button("По дате", action: {})
+                            
+                            Button("Без сортировки", action: {})
                         }
                         
                         Button("Удалить все", action: {})

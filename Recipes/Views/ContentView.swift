@@ -6,13 +6,13 @@
 //
 
 import SwiftUI
-import CoreData
 
 struct ContentView: View {
+    @EnvironmentObject private var imageStorage: ImageStorage
     
     var body: some View {
         TabView {
-            HomeView()
+            HomeView(imageStorage: imageStorage)
                 .tabItem {
                     Label("Все рецепты", systemImage: "house")
                 }

@@ -9,7 +9,7 @@ import SwiftUI
 
 final class HomeViewModel: ObservableObject {
     
-    private let imageStorage: ImageStorage
+    let imageStorage: ImageStorage
     
     init(imageStorage: ImageStorage) {
         self.imageStorage = imageStorage
