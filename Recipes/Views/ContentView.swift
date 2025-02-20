@@ -12,7 +12,7 @@ struct ContentView: View {
     
     @State var selectedTab = "Все рецепты"
     
-    let tabs = ["Все рецепты", "Поиск", "Избранное"]
+    let tabs = ["Поиск", "Все рецепты", "Избранное"]
     
     //Сокрытие TabBar
     init() {
@@ -20,28 +20,29 @@ struct ContentView: View {
     }
     
     var body: some View {
-        TabView(selection: $selectedTab) {
-            HomeView(imageStorage: imageStorage)
-                .tag("Все рецепты")
-            SearchView()
-                .tag("Поиск")
-            FavView()
-                .tag("Избранное")
-            
-        }
-        
-        HStack {
-            ForEach(tabs, id: \.self) { tab in
-                TabBarItem(tab: tab, selected: $selectedTab)
+        VStack {
+            TabView(selection: $selectedTab) {
+                SearchView()
+                    .tag("Поиск")
+                HomeView(imageStorage: imageStorage)
+                    .tag("Все рецепты")
+                FavView()
+                    .tag("Избранное")
             }
-
+            
+            HStack {
+                ForEach(tabs, id: \.self) { tab in
+                    TabBarItem(tab: tab, selected: $selectedTab)
+                }
+            }
+            .padding(15)
+            .background(Color.colorTabBar)
+            .clipShape(Capsule())
         }
-        .padding(15)
-        .background(Color.colorTabBar)
-        .clipShape(Capsule())
     }
 }
 
+//структура для кастома TabBar
 struct TabBarItem: View {
     @State var tab: String
     

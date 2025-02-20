@@ -22,7 +22,7 @@ struct FavView: View {
                 Button {
                     // Действие для кнопки "trash"
                 } label: {
-                    Label("", systemImage: "trash")
+                    Image("Корзина")
                 }
             }
         }

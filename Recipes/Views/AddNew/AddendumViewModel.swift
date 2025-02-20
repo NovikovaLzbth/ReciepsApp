@@ -8,9 +8,12 @@
 import SwiftUI
 import CoreData
 
-final class AddendumViewModel: ObservableObject {
+struct Comm {
+    var title: String?
+    var descrip: String?
+}
 
-    @Published var uiImage: UIImage?
+final class AddendumViewModel: ObservableObject {
     
     let imageStorage: ImageStorage
     
@@ -20,5 +23,9 @@ final class AddendumViewModel: ObservableObject {
     
     func saveImage(_ imageData: Data) {
         imageStorage.saveImageData(imageData)
+    }
+    
+    func addComment(objectID: NSManagedObjectID, comm: Comm) {
+        imageStorage.edit(objectID: objectID, comm: comm)
     }
 }

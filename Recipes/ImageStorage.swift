@@ -30,5 +30,34 @@ final class ImageStorage: ObservableObject {
             print("Failed to save image: \(error)")
         }
     }
+    
+    func deleteImage(_ imageData: Data) {
+        
+    }
+    
+    func edit(objectID: NSManagedObjectID?, comm: Comm) {
+        guard
+            let objectID = objectID,
+            var image = try? self.context.existingObject(with: objectID) as? Item
+        else {
+            return
+        }
+        
+        if let title = comm.title {
+            image.title = title
+        }
+        
+        if let descrip = comm.descrip {
+            image.descrip = descrip
+        }
+        
+        do {
+            try self.context.save()
+            print("комментарий добавлен")
+            print(image)
+        } catch {
+            print("Ошибка")
+        }
+    }
 }
 

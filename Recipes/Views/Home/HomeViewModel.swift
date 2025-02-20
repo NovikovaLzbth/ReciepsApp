@@ -14,7 +14,6 @@ final class HomeViewModel: ObservableObject {
     init(imageStorage: ImageStorage) {
         self.imageStorage = imageStorage
     }
-    
 }
 
 

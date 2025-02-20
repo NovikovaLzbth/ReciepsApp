@@ -25,43 +25,32 @@ struct HomeView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                VStack {
+                ZStack {
+                    NavigationLink {
+                        AddendumView(imageStorage: viewModel.imageStorage, fieldValueTitle: "", fieldValueDescrip: "")
+                    } label: {
+                        Label("", systemImage: "plus.circle.dashed")
+                            .scaleEffect(2.5)
+                            .foregroundStyle(.satadcolor)
+                            
+                    }
+                    .frame(width: 100, height: 90)
+                    .position(x: 345, y: 530)
+                    .zIndex(1)
+                    
                     ScrollView(.vertical) {
-                        
-//                        if viewModel.url != nil {
-//                            Image("pngwing.png")
-//                                .resizable()
-//                                .scaledToFit ()
-//                        } else {
-//                            LazyVGrid(columns: colomn, alignment: .center) {
-//                                if let image = viewModel.uiImage {
-//                                    Image(uiImage: image)
-//                                        .resizable()
-//                                        .scaledToFit()
-//                                        .cornerRadius(10)
-//                                        .overlay{
-//                                            RoundedRectangle(cornerRadius: 10)
-//                                                .stroke(.black, lineWidth: 3)
-//                                        }
-//                                        .padding(16)
-//                                }
-//                            }
+                        Image("icon")
+                            .resizable()
+                            .scaledToFit()
+                            .cornerRadius(10)
+                            .frame(width: 300, height: 300)
+                            .padding(.top, 120)
+//                        LazyVGrid(columns: colomn, alignment: .center) {
+//                            
 //                        }
                     }
                 }
-                
-                ZStack {
-                    NavigationLink {
-                        AddendumView(imageStorage: viewModel.imageStorage)
-                    } label: {
-                        Label("", systemImage: "plus.circle.dashed")
-                            .scaleEffect(2.8)
-                            .foregroundStyle(.gray)
-                            .position(x: 340, y: 220)
-                    }
-                }
             }
-            
             .navigationBarTitle(Text("Все рецепты"))
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
@@ -74,7 +63,7 @@ struct HomeView: View {
                         
                         Button("Удалить все", action: {})
                     } label: {
-                        Label("", systemImage: "ellipsis")
+                        Image("Menu")
                     }
                 }
             }
