@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject private var imageStorage: ImageStorage
+    @EnvironmentObject private var storage: Storage
     
     @State var selectedTab = "Все рецепты"
     
@@ -24,7 +24,7 @@ struct ContentView: View {
             TabView(selection: $selectedTab) {
                 SearchView()
                     .tag("Поиск")
-                HomeView(imageStorage: imageStorage)
+                HomeView(storage: storage)
                     .tag("Все рецепты")
                 FavView()
                     .tag("Избранное")
@@ -35,7 +35,7 @@ struct ContentView: View {
                     TabBarItem(tab: tab, selected: $selectedTab)
                 }
             }
-            .padding(15)
+            .padding(10)
             .background(Color.colorTabBar)
             .clipShape(Capsule())
         }
@@ -71,8 +71,4 @@ struct TabBarItem: View {
         .background(selected == tab ? .white : .colorTabBar)
         .clipShape(Capsule())
     }
-}
-
-#Preview {
-    ContentView()
 }

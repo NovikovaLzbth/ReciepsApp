@@ -15,17 +15,21 @@ struct Comm {
 
 final class AddendumViewModel: ObservableObject {
     
-    let imageStorage: ImageStorage
+    @Published var uiImage: UIImage?
     
-    init(imageStorage: ImageStorage) {
-        self.imageStorage = imageStorage
+    let storage: Storage
+    
+    init(storage: Storage) {
+        self.storage = storage
     }
     
-    func saveImage(_ imageData: Data) {
-        imageStorage.saveImageData(imageData)
+    func saveImage() {
+        guard let uiImage = uiImage else { return }
+        
+        storage.writeImage(uiImage: uiImage)
     }
     
     func addComment(objectID: NSManagedObjectID, comm: Comm) {
-        imageStorage.edit(objectID: objectID, comm: comm)
+        storage.edit(objectID: objectID, comm: comm)
     }
 }

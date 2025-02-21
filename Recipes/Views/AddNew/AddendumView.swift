@@ -10,24 +10,25 @@ import PhotosUI
 import CoreData
 
 struct AddendumView: View {
+    @Environment(\.presentationMode) var presentationMode
     
     @StateObject private var viewModel: AddendumViewModel
     
     @Environment(\.managedObjectContext) private var viewContext
     
     @State private var pickerItem: PhotosPickerItem?
-    @State private var selectedImage: Image?
+    @State private var selectedImage: UIImage?
     @State var fieldValueTitle: String
     @State var fieldValueDescrip: String
     @State private var isEdit = false
     
     @FocusState private var nameIsFocused: Bool
     
-    init(imageStorage: ImageStorage,
+    init(storage: Storage,
          fieldValueTitle: String,
          fieldValueDescrip: String
     ) {
-        _viewModel = StateObject(wrappedValue: AddendumViewModel(imageStorage: imageStorage))
+        _viewModel = StateObject(wrappedValue: AddendumViewModel(storage: storage))
         self.fieldValueTitle = fieldValueTitle
         self.fieldValueDescrip = fieldValueDescrip
     }
@@ -41,7 +42,7 @@ struct AddendumView: View {
                             
                             // Условие для проверки, выбрал ли пользователь изображение
                             if let selectedImage = selectedImage {
-                                selectedImage
+                                Image(uiImage: selectedImage)
                                     .resizable()
                                     .scaledToFit()
                                     .cornerRadius(10)
@@ -70,15 +71,17 @@ struct AddendumView: View {
                                     Task {
                                         if let item = newItem {
                                             if let imageData = try await item.loadTransferable(type: Data.self) {
-                                                selectedImage = Image(uiImage: UIImage(data: imageData)!)
-                                                viewModel.saveImage(imageData)
+                                                selectedImage = UIImage(data: imageData)
                                             }
                                         }
                                     }
                                 }
                             }
                         }
-                        .padding(.bottom, 25)
+                        .padding(.bottom, 35)
+                        
+                        Divider()
+                            .padding(.horizontal, 60)
                         
                         VStack {
                             VStack {
@@ -109,9 +112,19 @@ struct AddendumView: View {
                             .focused($nameIsFocused)
                             .padding(16)
                         }
+                        
+                        Button("Сохранить",
+                               action: {
+                            viewModel.uiImage = selectedImage
+                            viewModel.saveImage()
+                            presentationMode.wrappedValue.dismiss()
+                        })
+                        .padding()
+                        .foregroundStyle(.darkGray)
+                        .background(Color.colorBG)
+                        .clipShape(Capsule())
                     }
                 }
-                .navigationBarTitle(Text("Создать новый"))
             }
         }
     }

@@ -10,13 +10,13 @@ import SwiftUI
 @main
 struct RecipesApp: App {
     let persistenceController = PersistenceController.shared
-    @StateObject private var imageStorage = ImageStorage(persistenceController: PersistenceController.shared)
+    private let storage = Storage(persistenceController: PersistenceController.shared)
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            LaunchScreenView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
-                .environmentObject(imageStorage)
+                .environmentObject(storage)
         }
     }
 }

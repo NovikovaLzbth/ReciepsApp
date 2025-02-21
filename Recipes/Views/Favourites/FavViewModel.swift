@@ -9,10 +9,10 @@ import SwiftUI
 
 final class FavViewModel: ObservableObject {
     
-    private let imageStorage: ImageStorage
+    private let storage: Storage
     
-    init(imageStorage: ImageStorage) {
-        self.imageStorage = imageStorage
+    init(storage: Storage) {
+        self.storage = storage
     }
     
 }

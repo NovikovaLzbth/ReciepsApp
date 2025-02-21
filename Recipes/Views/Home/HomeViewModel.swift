@@ -9,10 +9,14 @@ import SwiftUI
 
 final class HomeViewModel: ObservableObject {
     
-    let imageStorage: ImageStorage
+    let storage: Storage
     
-    init(imageStorage: ImageStorage) {
-        self.imageStorage = imageStorage
+    init(storage: Storage) {
+        self.storage = storage
+    }
+    
+    func deleteAll() {
+        storage.deleteAll()
     }
 }
 
