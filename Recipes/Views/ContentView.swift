@@ -35,10 +35,8 @@ struct ContentView: View {
                     TabBarItem(tab: tab, selected: $selectedTab)
                 }
             }
-            .padding(10)
-            .background(Color.colorTabBar)
-            .clipShape(Capsule())
         }
+        .background(Color.colorTabBar)
     }
 }
 

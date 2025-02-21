@@ -46,12 +46,6 @@ struct AddendumView: View {
                                     .resizable()
                                     .scaledToFit()
                                     .cornerRadius(10)
-                                    .overlay {
-                                        RoundedRectangle(cornerRadius: 10)
-                                            .stroke(.black, lineWidth: 1)
-                                    }
-                                    .padding(.top, 20)
-                                    .padding(18)
                             } else {
                                 VStack {
                                     Label("", systemImage: "photo.badge.plus")
@@ -60,13 +54,14 @@ struct AddendumView: View {
                                         .padding(16)
                                     PhotosPicker("Выбрать фото", selection: $pickerItem, matching: .images)
                                 }
-                                .padding(.vertical, 70)
-                                .padding(.horizontal, 120)
+                                .padding(.vertical, 90)
+                                .padding(.horizontal, 130)
+                                .background(Color.white)
+                                .cornerRadius(10)
                                 .overlay {
                                     RoundedRectangle(cornerRadius: 10)
-                                        .stroke(.gray, lineWidth: 1)
+                                        .stroke(.darkGray, lineWidth: 1)
                                 }
-                                .padding(.top, 70)
                                 .onChange(of: pickerItem) { newItem in
                                     Task {
                                         if let item = newItem {
@@ -78,10 +73,11 @@ struct AddendumView: View {
                                 }
                             }
                         }
-                        .padding(.bottom, 35)
+                        .padding(.bottom, 20)
                         
                         Divider()
                             .padding(.horizontal, 60)
+                            .padding(.vertical, 18)
                         
                         VStack {
                             VStack {
@@ -91,11 +87,13 @@ struct AddendumView: View {
                                     )
                                 })
                                 .padding(16)
+                                .background(Color.white)
+                                .cornerRadius(10)
                                 .overlay {
                                     RoundedRectangle(cornerRadius: 10)
-                                        .stroke(.gray, lineWidth: 1)
+                                        .stroke(.darkGray, lineWidth: 1)
                                 }
-                                .padding(.bottom, 10)
+                                .padding(.bottom, 3)
                                 
                                 TextField("Описание", text: $fieldValueDescrip, onCommit: {
                                     let comm = Comm(
@@ -103,29 +101,35 @@ struct AddendumView: View {
                                     )
                                 })
                                 .padding(16)
-                                .frame(height: 100)
+                                .background(Color.white)
+                                .cornerRadius(10)
                                 .overlay {
                                     RoundedRectangle(cornerRadius: 10)
-                                        .stroke(.gray, lineWidth: 1)
+                                        .stroke(.darkGray, lineWidth: 1)
                                 }
                             }
                             .focused($nameIsFocused)
-                            .padding(16)
+                            .padding(.horizontal, 20)
                         }
+                        .padding(.bottom, 27)
                         
                         Button("Сохранить",
                                action: {
+                            // Создание генератора обратной связи
+                            let feedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
+                            feedbackGenerator.prepare() // Подготовка генератора
+                            feedbackGenerator.impactOccurred() // Вибрация при нажатии
+                            
                             viewModel.uiImage = selectedImage
                             viewModel.saveImage()
                             presentationMode.wrappedValue.dismiss()
                         })
                         .padding()
                         .foregroundStyle(.darkGray)
-                        .background(Color.colorBG)
-                        .clipShape(Capsule())
                     }
                 }
             }
+            .background(Color.colorBG.edgesIgnoringSafeArea(.all))
         }
     }
 }
