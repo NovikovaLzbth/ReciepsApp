@@ -22,15 +22,19 @@ struct AddendumView: View {
     @State var fieldValueDescrip: String
     @State private var isEdit = false
     
+    var image: Item = Item()
+    
     @FocusState private var nameIsFocused: Bool
     
     init(storage: Storage,
          fieldValueTitle: String,
-         fieldValueDescrip: String
+         fieldValueDescrip: String,
+         image: Item
     ) {
         _viewModel = StateObject(wrappedValue: AddendumViewModel(storage: storage))
         self.fieldValueTitle = fieldValueTitle
         self.fieldValueDescrip = fieldValueDescrip
+        self.image = image
     }
     
     var body: some View {
@@ -45,7 +49,6 @@ struct AddendumView: View {
                                 Image(uiImage: selectedImage)
                                     .resizable()
                                     .scaledToFit()
-                                    .cornerRadius(10)
                             } else {
                                 VStack {
                                     Label("", systemImage: "photo.badge.plus")
@@ -79,38 +82,37 @@ struct AddendumView: View {
                             .padding(.horizontal, 60)
                             .padding(.vertical, 18)
                         
+                        //Комментарий
                         VStack {
-                            VStack {
-                                TextField("Название", text: $fieldValueTitle, onCommit: {
-                                    let comm = Comm(
-                                        title: fieldValueTitle
-                                    )
-                                })
-                                .padding(16)
-                                .background(Color.white)
-                                .cornerRadius(10)
-                                .overlay {
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .stroke(.darkGray, lineWidth: 1)
-                                }
-                                .padding(.bottom, 3)
-                                
-                                TextField("Описание", text: $fieldValueDescrip, onCommit: {
-                                    let comm = Comm(
-                                        descrip: fieldValueDescrip
-                                    )
-                                })
-                                .padding(16)
-                                .background(Color.white)
-                                .cornerRadius(10)
-                                .overlay {
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .stroke(.darkGray, lineWidth: 1)
-                                }
+                            TextField("Название", text: $fieldValueTitle, onCommit: {
+                                let comm = Comm(
+                                    title: fieldValueTitle
+                                )
+                            })
+                            .padding(16)
+                            .background(Color.white)
+                            .cornerRadius(10)
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(.darkGray, lineWidth: 1)
                             }
-                            .focused($nameIsFocused)
-                            .padding(.horizontal, 20)
+                            .padding(.bottom, 3)
+                            
+                            TextField("Список ингредиентов", text: $fieldValueDescrip, onCommit: {
+                                let comm = Comm(
+                                    descrip: fieldValueDescrip
+                                )
+                            })
+                            .padding(16)
+                            .background(Color.white)
+                            .cornerRadius(10)
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(.darkGray, lineWidth: 1)
+                            }
                         }
+                        .focused($nameIsFocused)
+                        .padding(.horizontal, 20)
                         .padding(.bottom, 27)
                         
                         Button("Сохранить",
@@ -123,13 +125,19 @@ struct AddendumView: View {
                             viewModel.uiImage = selectedImage
                             viewModel.saveImage()
                             presentationMode.wrappedValue.dismiss()
+                            
+                            let comm = Comm(
+                                title: fieldValueTitle,
+                                descrip: fieldValueDescrip
+                            )
+                            viewModel.addComment(objectID: image.objectID, comm: comm)
                         })
-                        .padding()
                         .foregroundStyle(.darkGray)
+                        .padding(20)
                     }
                 }
             }
-            .background(Color.colorBG.edgesIgnoringSafeArea(.all))
+            .background(Color.colorBG)
         }
     }
 }

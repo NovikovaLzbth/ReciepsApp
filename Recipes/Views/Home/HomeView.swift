@@ -29,8 +29,9 @@ struct HomeView: View {
         NavigationStack {
             VStack {
                 ZStack {
+                // TODO: исправить то чтобы появлялась кнопка добавления вне зависимости от начилия изображения в БД
                     NavigationLink {
-                        AddendumView(storage: viewModel.storage, fieldValueTitle: "", fieldValueDescrip: "")
+                        AddendumView(storage: viewModel.storage, fieldValueTitle: "", fieldValueDescrip: "", image: )
                     } label: {
                         Image(systemName: "plus.circle.dashed")
                             .scaleEffect(2.5)
