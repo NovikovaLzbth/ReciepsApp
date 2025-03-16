@@ -10,6 +10,9 @@ import CoreData
 
 final class Storage: ObservableObject {
     
+    @Published var favoriteImageIDs: Set<UUID> = []
+    @Published var items: [Item]
+    
     private let persistenceController: PersistenceController
     private var context: NSManagedObjectContext {
         persistenceController.viewContext
@@ -17,6 +20,7 @@ final class Storage: ObservableObject {
     
     init(persistenceController: PersistenceController) {
         self.persistenceController = persistenceController
+        self.items = []
     }
     
     func writeImage(uiImage: UIImage) {

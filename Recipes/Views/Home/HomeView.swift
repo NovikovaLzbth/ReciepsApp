@@ -14,7 +14,7 @@ struct HomeView: View {
     @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Item.uuid, ascending: true)], animation: .default)
     private var images: FetchedResults<Item>
     
-    @State private var isTapped = true
+    @State private var favoriteImages: Set<UUID> = []
     
     init(storage: Storage) {
         _viewModel = StateObject(wrappedValue: HomeViewModel(storage: storage))
@@ -29,9 +29,8 @@ struct HomeView: View {
         NavigationStack {
             VStack {
                 ZStack {
-                // TODO: исправить то чтобы появлялась кнопка добавления вне зависимости от начилия изображения в БД
                     NavigationLink {
-                        AddendumView(storage: viewModel.storage, fieldValueTitle: "", fieldValueDescrip: "", image: )
+                        AddendumView(storage: viewModel.storage, fieldValueTitle: "", fieldValueDescrip: "", image: nil)
                     } label: {
                         Image(systemName: "plus.circle.dashed")
                             .scaleEffect(2.5)
@@ -59,26 +58,39 @@ struct HomeView: View {
                                 ForEach(images, id: \.self) { item in
                                     if let imageData = item.image {
                                         if let uiImage = UIImage(data: imageData) {
-                                            VStack {
-                                                ZStack {
-                                                    Image(uiImage: uiImage)
-                                                        .resizable()
-                                                        .aspectRatio(contentMode: .fill)
-                                                        .frame(width: 190, height: 220)
-                                                        .clipShape(CustomRoundedShape())
-                                                        .padding(.bottom, 60)
-                                                    
-                                                    Image(isTapped ? "сердце" : "зеленое сердце")
-                                                        .onTapGesture { isTapped.toggle() }
-                                                        .scaleEffect(0.5)
-                                                        .position(x: 155, y: 25)
+                                            if let itemId = item.uuid {
+                                                VStack {
+                                                    ZStack {
+                                                        Image(uiImage: uiImage)
+                                                            .resizable()
+                                                            .aspectRatio(contentMode: .fill)
+                                                            .frame(width: 190, height: 220)
+                                                            .clipShape(CustomRoundedShape())
+                                                            .padding(.bottom, 60)
                                                         
+                                                        Image(favoriteImages.contains(itemId) ? "зеленое сердце" : "сердце")
+                                                            .onTapGesture {
+                                                                // ТToggle состояние избранного для конкретного изображения
+                                                                if favoriteImages.contains(itemId) {
+                                                                    print("no")
+                                                                    favoriteImages.remove(itemId)
+                                                                } else {
+                                                                    print("dobavilos")
+                                                                    favoriteImages.insert(itemId)
+                                                                }
+                                                            }
+                                                            .scaleEffect(0.5)
+                                                            .position(x: 155, y: 25)
+                                                    }
                                                 }
-                                                
+                                                .onAppear {
+                                                    let favoriteUUIDs = favoriteImages.map { $0.uuid }
+                                                    print("Сохраненные изображения в избранном: \(favoriteUUIDs)")
+                                                }
+                                                .background(Color.white)
+                                                .cornerRadius(18)
+                                                .padding(.bottom, 30)
                                             }
-                                            .background(Color.white)
-                                            .cornerRadius(18)
-                                            .padding(.bottom, 30)
                                         }
                                     }
                                 }
@@ -113,7 +125,7 @@ struct HomeView: View {
 struct CustomRoundedShape: Shape {
     func path(in rect: CGRect) -> Path {
         var path = Path()
-
+        
         path.move(to: CGPoint(x: rect.minX, y: rect.minY + 18))
         path.addArc(center: CGPoint(x: rect.minX + 18, y: rect.minY + 18), radius: 18, startAngle: .degrees(180), endAngle: .degrees(270), clockwise: false)
         path.addLine(to: CGPoint(x: rect.maxX - 18, y: rect.minY))
@@ -121,7 +133,7 @@ struct CustomRoundedShape: Shape {
         path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
         path.addLine(to: CGPoint(x: rect.minX, y: rect.maxY))
         path.closeSubpath()
-
+        
         return path
     }
 }

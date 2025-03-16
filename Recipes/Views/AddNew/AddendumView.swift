@@ -22,14 +22,14 @@ struct AddendumView: View {
     @State var fieldValueDescrip: String
     @State private var isEdit = false
     
-    var image: Item = Item()
+    var image: Item?
     
     @FocusState private var nameIsFocused: Bool
     
     init(storage: Storage,
          fieldValueTitle: String,
          fieldValueDescrip: String,
-         image: Item
+         image: Item?
     ) {
         _viewModel = StateObject(wrappedValue: AddendumViewModel(storage: storage))
         self.fieldValueTitle = fieldValueTitle
@@ -115,6 +115,7 @@ struct AddendumView: View {
                         .padding(.horizontal, 20)
                         .padding(.bottom, 27)
                         
+                        //TODO: сделать добавление комментария
                         Button("Сохранить",
                                action: {
                             // Создание генератора обратной связи
@@ -124,13 +125,9 @@ struct AddendumView: View {
                             
                             viewModel.uiImage = selectedImage
                             viewModel.saveImage()
-                            presentationMode.wrappedValue.dismiss()
                             
-                            let comm = Comm(
-                                title: fieldValueTitle,
-                                descrip: fieldValueDescrip
-                            )
-                            viewModel.addComment(objectID: image.objectID, comm: comm)
+                            presentationMode.wrappedValue.dismiss()
+                        
                         })
                         .foregroundStyle(.darkGray)
                         .padding(20)
