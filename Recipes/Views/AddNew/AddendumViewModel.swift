@@ -23,13 +23,9 @@ final class AddendumViewModel: ObservableObject {
         self.storage = storage
     }
     
-    func saveImage() {
+    func loadImage(comm: Comm) {
         guard let uiImage = uiImage else { return }
         
-        storage.writeImage(uiImage: uiImage)
-    }
-    
-    func addComment(objectID: NSManagedObjectID, comm: Comm) {
-        storage.edit(objectID: objectID, comm: comm)
+        storage.saveImageWithComment(uiImage: uiImage, comm: comm)
     }
 }

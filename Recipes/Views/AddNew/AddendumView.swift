@@ -115,7 +115,6 @@ struct AddendumView: View {
                         .padding(.horizontal, 20)
                         .padding(.bottom, 27)
                         
-                        //TODO: сделать добавление комментария
                         Button("Сохранить",
                                action: {
                             // Создание генератора обратной связи
@@ -124,7 +123,13 @@ struct AddendumView: View {
                             feedbackGenerator.impactOccurred() // Вибрация при нажатии
                             
                             viewModel.uiImage = selectedImage
-                            viewModel.saveImage()
+                            
+                            let comm = Comm(
+                                title: fieldValueTitle,
+                                descrip: fieldValueDescrip
+                            )
+                            
+                            viewModel.loadImage(comm: comm)
                             
                             presentationMode.wrappedValue.dismiss()
                         
