@@ -14,8 +14,6 @@ struct HomeView: View {
     @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Item.uuid, ascending: true)], animation: .default)
     private var images: FetchedResults<Item>
     
-    
-    
     init(storage: Storage) {
         _viewModel = StateObject(wrappedValue: HomeViewModel(storage: storage))
     }
@@ -60,28 +58,37 @@ struct HomeView: View {
                                         if let uiImage = UIImage(data: imageData) {
                                             if let itemId = item.uuid {
                                                 if let title = item.title {
-                                                    VStack {
-                                                        ZStack {
-                                                            Image(uiImage: uiImage)
-                                                                .resizable()
-                                                                .aspectRatio(contentMode: .fill)
-                                                                .frame(width: 190, height: 220)
-                                                                .clipShape(CustomRoundedShape())
-                                                                .padding(.bottom, 10)
+                                                    NavigationLink {
+                                                        ThatView(storage: viewModel.storage, image: item)
+                                                    } label: {
+                                                        VStack {
+                                                            ZStack {
+                                                                Image(uiImage: uiImage)
+                                                                    .resizable()
+                                                                    .aspectRatio(contentMode: .fill)
+                                                                    .frame(width: 190, height: 220)
+                                                                    .clipShape(CustomRoundedShape())
+                                                                    .padding(.bottom, 10)
+                                                                
+                                                                Image("сердце")
+                                                                //Image(favoriteImages.contains(itemId) ? "зеленое сердце" : "сердце")
+                                                                    .onTapGesture {
+                                                                    }
+                                                                    .scaleEffect(0.5)
+                                                                    .position(x: 155, y: 25)
+                                                            }
                                                             
-                                                            Image("сердце")
-                                                            //Image(favoriteImages.contains(itemId) ? "зеленое сердце" : "сердце")
-                                                                .onTapGesture {
-                                                                }
-                                                                .scaleEffect(0.5)
-                                                                .position(x: 155, y: 25)
+                                                            Text(title)
+                                                                .padding(.leading, 7)
+                                                                .foregroundStyle(.black)
+                                                                .padding(.bottom, 15)
+                                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                                                .fontWeight(.medium)
                                                         }
-                                                        Text(title)
-                                                            .padding(.bottom, 15)
+                                                        .background(Color.white)
+                                                        .cornerRadius(18)
+                                                        .padding(.bottom, 30)
                                                     }
-                                                    .background(Color.white)
-                                                    .cornerRadius(18)
-                                                    .padding(.bottom, 30)
                                                 }
                                             }
                                         }

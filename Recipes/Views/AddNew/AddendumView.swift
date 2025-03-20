@@ -19,8 +19,13 @@ struct AddendumView: View {
     @State private var pickerItem: PhotosPickerItem?
     @State private var selectedImage: UIImage?
     @State var fieldValueTitle: String
-    @State var fieldValueDescrip: String
+    @State var fieldValueDescrip: String 
     @State private var isEdit = false
+    @State private var showAlert = false
+    @State private var alertMessage = ""
+    
+    //Ограничение для заголовка
+    private let characterLimit = 15
     
     var image: Item?
     
@@ -58,7 +63,7 @@ struct AddendumView: View {
                                     PhotosPicker("Выбрать фото", selection: $pickerItem, matching: .images)
                                 }
                                 .padding(.vertical, 90)
-                                .padding(.horizontal, 130)
+                                .padding(.horizontal, 125)
                                 .background(Color.white)
                                 .cornerRadius(10)
                                 .overlay {
@@ -78,38 +83,50 @@ struct AddendumView: View {
                         }
                         .padding(.bottom, 20)
                         
-                        Divider()
-                            .padding(.horizontal, 60)
-                            .padding(.vertical, 18)
-                        
                         //Комментарий
                         VStack {
-                            TextField("Название", text: $fieldValueTitle, onCommit: {
-                                let comm = Comm(
-                                    title: fieldValueTitle
-                                )
-                            })
-                            .padding(16)
-                            .background(Color.white)
-                            .cornerRadius(10)
-                            .overlay {
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(.darkGray, lineWidth: 1)
+                            ZStack{
+                                Text("\(fieldValueTitle.count)/\(characterLimit)")
+                                    .zIndex(1)
+                                    .position(x: 315, y: 27)
+                                    .foregroundStyle(.darkGray)
+                                
+                                TextField("Название", text: $fieldValueTitle)
+                                //Ограничение для заголовка
+                                .onChange(of: fieldValueTitle) { newValue in
+                                    if fieldValueTitle.count > characterLimit {
+                                        fieldValueTitle = String(fieldValueTitle.prefix(characterLimit))
+                                    }
+                                }
+                                .padding(16)
+                                .background(Color.white)
+                                .cornerRadius(10)
+                                .overlay {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(.darkGray, lineWidth: 1)
+                                }
+                                .padding(.bottom, 3)
                             }
-                            .padding(.bottom, 3)
                             
-                            TextField("Список ингредиентов", text: $fieldValueDescrip, onCommit: {
-                                let comm = Comm(
-                                    descrip: fieldValueDescrip
-                                )
-                            })
-                            .padding(16)
-                            .background(Color.white)
-                            .cornerRadius(10)
-                            .overlay {
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(.darkGray, lineWidth: 1)
-                            }
+                            Divider()
+                                .padding(.horizontal, -60)
+                                .padding(.vertical, 18)
+                            
+                            Text("Список ингредиентов:")
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .font(.title2)
+                                .fontWeight(.medium)
+                                .padding(.leading, 7)
+                                
+                            TextEditor(text: $fieldValueDescrip)
+                                .padding(16)
+                                .background(Color.white)
+                                .cornerRadius(10)
+                                .overlay {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(.darkGray, lineWidth: 1)
+                                }
+                                .frame(height: 400)
                         }
                         .focused($nameIsFocused)
                         .padding(.horizontal, 20)
@@ -117,6 +134,12 @@ struct AddendumView: View {
                         
                         Button("Сохранить",
                                action: {
+                            if fieldValueTitle.isEmpty || fieldValueDescrip.isEmpty {
+                                alertMessage = "Пожалуйста, заполните все поля."
+                                showAlert = true
+                                return
+                            }
+                            
                             // Создание генератора обратной связи
                             let feedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
                             feedbackGenerator.prepare() // Подготовка генератора
@@ -134,6 +157,11 @@ struct AddendumView: View {
                             presentationMode.wrappedValue.dismiss()
                         
                         })
+                        .alert(isPresented: $showAlert) {
+                            Alert(title: Text("Ошибка"),
+                                  message: Text(alertMessage),
+                                  dismissButton: .default(Text("OK")))
+                        }
                         .foregroundStyle(.darkGray)
                         .padding(20)
                     }
