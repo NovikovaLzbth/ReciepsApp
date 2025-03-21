@@ -63,7 +63,7 @@ struct AddendumView: View {
                                     PhotosPicker("Выбрать фото", selection: $pickerItem, matching: .images)
                                 }
                                 .padding(.vertical, 90)
-                                .padding(.horizontal, 125)
+                                .padding(.horizontal, 120)
                                 .background(Color.white)
                                 .cornerRadius(10)
                                 .overlay {

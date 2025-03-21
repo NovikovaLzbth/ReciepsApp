@@ -29,6 +29,7 @@ final class Storage: ObservableObject {
         
         item.image = data
         item.uuid = UUID()
+        item.date = Date()
                 
         if let title = comm.title {
             item.title = title

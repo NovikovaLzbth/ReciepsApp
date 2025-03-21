@@ -23,15 +23,63 @@ struct ThatView: View {
     var body: some View {
         HStack {
             ScrollView {
-                HStack {
+                VStack {
                     if let imageData = image.image,
                        let uiImage = UIImage(data: imageData) {
                         Image(uiImage: uiImage)
                             .resizable()
                             .scaledToFit()
+                            .padding(.bottom, 10)
+                    }
+                    
+                    if let title = image.title {
+                        Text(title)
+                            .font(.title)
+                            .fontWeight(.bold)
+                    }
+                    
+                    Divider()
+                        .padding(.horizontal, -60)
+                        .padding(.vertical, 10)
+                    
+                    Text("Список ингредиентов:")
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .font(.title2)
+                        .fontWeight(.medium)
+                        .padding(.leading, 25)
+                    
+                    if let descrip = image.descrip {
+                        Text(descrip)
+                            .padding(16)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(.white)
+                            .cornerRadius(10)
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(.darkGray, lineWidth: 1)
+                            }
+                            .padding(.horizontal, 16)
+                            .padding(.bottom, 16)
+                    }
+                    
+                    if let date = image.date {
+                        Text("\(dateAndTime(date))")
+                            .foregroundColor(.gray)
+                            .padding(.bottom, 16)
                     }
                 }
             }
         }
+        .background((Color.colorBG).ignoresSafeArea(.all))
+    }
+    private func dateAndTime(_ date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        
+        dateFormatter.calendar = Calendar(identifier: .gregorian)
+        dateFormatter.locale = Locale(identifier: "ru_RU")
+        dateFormatter.dateFormat = "dd-MM-yyyy, HH:mm"
+        let dateString = dateFormatter.string(from: date)
+        
+        return dateString
     }
 }

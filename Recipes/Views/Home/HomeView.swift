@@ -53,41 +53,57 @@ struct HomeView: View {
                         } else {
                             // Показать изображения из базы данных
                             LazyVGrid(columns: colomns, alignment: .center) {
-                                ForEach(images, id: \.self) { item in
+                                ForEach(images.sorted {
+                                    switch viewModel.sortType {
+                                    case .byName:
+                                        $0.title ?? "" < $1.title ?? ""
+                                    case .byDate:
+                                        $0.date ?? Date() < $1.date ?? Date()
+                                    case .defaultOrder:
+                                        false
+                                    }
+                                }, id: \.self) { item in
                                     if let imageData = item.image {
                                         if let uiImage = UIImage(data: imageData) {
                                             if let itemId = item.uuid {
                                                 if let title = item.title {
-                                                    NavigationLink {
-                                                        ThatView(storage: viewModel.storage, image: item)
-                                                    } label: {
-                                                        VStack {
-                                                            ZStack {
-                                                                Image(uiImage: uiImage)
-                                                                    .resizable()
-                                                                    .aspectRatio(contentMode: .fill)
-                                                                    .frame(width: 190, height: 220)
-                                                                    .clipShape(CustomRoundedShape())
-                                                                    .padding(.bottom, 10)
+                                                    if let date = item.date {
+                                                        NavigationLink {
+                                                            ThatView(storage: viewModel.storage, image: item)
+                                                        } label: {
+                                                            VStack {
+                                                                ZStack {
+                                                                    Image(uiImage: uiImage)
+                                                                        .resizable()
+                                                                        .aspectRatio(contentMode: .fill)
+                                                                        .frame(width: 190, height: 220)
+                                                                        .clipShape(CustomRoundedShape())
+                                                                        .padding(.bottom, 10)
+                                                                    
+                                                                    Image("сердце")
+                                                                    //Image(favoriteImages.contains(itemId) ? "зеленое сердце" : "сердце")
+                                                                        .onTapGesture {
+                                                                        }
+                                                                        .scaleEffect(0.5)
+                                                                        .position(x: 165, y: 25)
+                                                                }
                                                                 
-                                                                Image("сердце")
-                                                                //Image(favoriteImages.contains(itemId) ? "зеленое сердце" : "сердце")
-                                                                    .onTapGesture {
-                                                                    }
-                                                                    .scaleEffect(0.5)
-                                                                    .position(x: 155, y: 25)
+                                                                Text(title)
+                                                                    .padding(.leading, 7)
+                                                                    .foregroundStyle(.black)
+                                                                    .padding(.bottom, 10)
+                                                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                                                    .fontWeight(.medium)
+                                                                
+                                                                Text("\(dateAndTime(date))")
+                                                                    .foregroundColor(.gray)
+                                                                    .padding(.bottom, 5)
+                                                                
                                                             }
-                                                            
-                                                            Text(title)
-                                                                .padding(.leading, 7)
-                                                                .foregroundStyle(.black)
-                                                                .padding(.bottom, 15)
-                                                                .frame(maxWidth: .infinity, alignment: .leading)
-                                                                .fontWeight(.medium)
+                                                            .background(Color.white)
+                                                            .cornerRadius(18)
+                                                            .padding(.bottom, 30)
                                                         }
-                                                        .background(Color.white)
-                                                        .cornerRadius(18)
-                                                        .padding(.bottom, 30)
                                                     }
                                                 }
                                             }
@@ -104,9 +120,11 @@ struct HomeView: View {
                     ToolbarItem(placement: .topBarTrailing) {
                         Menu {
                             Menu("Сортировать") {
-                                Button("По дате", action: {})
+                                Button("По дате", action: { viewModel.sortType = .byDate })
                                 
-                                Button("Без сортировки", action: {})
+                                Button("По имени", action: { viewModel.sortType = .byName })
+                                
+                                Button("Без сортировки", action: { viewModel.sortType = .defaultOrder })
                             }
                             
                             Button("Удалить все", action: viewModel.deleteAll)
@@ -118,6 +136,17 @@ struct HomeView: View {
             }
             .background((Color.colorBG).ignoresSafeArea(.all))
         }
+    }
+    
+    private func dateAndTime(_ date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        
+        dateFormatter.calendar = Calendar(identifier: .gregorian)
+        dateFormatter.locale = Locale(identifier: "ru_RU")
+        dateFormatter.dateFormat = "dd-MM-yyyy, HH:mm"
+        let dateString = dateFormatter.string(from: date)
+        
+        return dateString
     }
 }
 

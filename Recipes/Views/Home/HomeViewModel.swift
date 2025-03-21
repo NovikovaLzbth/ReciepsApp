@@ -8,6 +8,13 @@
 import SwiftUI
 
 final class HomeViewModel: ObservableObject {
+    @Published var sortType: SortType = .defaultOrder
+    
+    enum SortType {
+        case defaultOrder
+        case byName
+        case byDate
+    }
     
     let storage: Storage
     
