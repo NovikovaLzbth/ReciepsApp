@@ -10,6 +10,8 @@ import SwiftUI
 struct ThatView: View {
     @StateObject private var viewModel: ThatViewModel
     
+    @Environment(\.presentationMode) var presentationMode
+    
     var image: Item = Item()
     
     init(
@@ -68,6 +70,17 @@ struct ThatView: View {
                             .padding(.bottom, 16)
                     }
                 }
+            }
+        }
+        .toolbar {
+            Button {
+                viewModel.delete(image: image)
+                
+                presentationMode.wrappedValue.dismiss()
+                
+            } label: {
+                Label("", image: "Корзина")
+                    .foregroundStyle(.darkGray)
             }
         }
         .background((Color.colorBG).ignoresSafeArea(.all))

@@ -15,4 +15,8 @@ final class ThatViewModel: ObservableObject {
     init(storage: Storage) {
         self.storage = storage
     }
+    
+    func delete(image: Item) {
+        storage.delete(image: image)
+    }
 }

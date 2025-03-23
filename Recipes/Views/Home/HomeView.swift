@@ -58,55 +58,40 @@ struct HomeView: View {
                                     case .byName:
                                         $0.title ?? "" < $1.title ?? ""
                                     case .byDate:
-                                        $0.date ?? Date() < $1.date ?? Date()
+                                        $0.date ?? Date() > $1.date ?? Date()
                                     case .defaultOrder:
                                         false
                                     }
                                 }, id: \.self) { item in
-                                    if let imageData = item.image {
-                                        if let uiImage = UIImage(data: imageData) {
-                                            if let itemId = item.uuid {
-                                                if let title = item.title {
-                                                    if let date = item.date {
-                                                        NavigationLink {
-                                                            ThatView(storage: viewModel.storage, image: item)
-                                                        } label: {
-                                                            VStack {
-                                                                ZStack {
-                                                                    Image(uiImage: uiImage)
-                                                                        .resizable()
-                                                                        .aspectRatio(contentMode: .fill)
-                                                                        .frame(width: 190, height: 220)
-                                                                        .clipShape(CustomRoundedShape())
-                                                                        .padding(.bottom, 10)
-                                                                    
-                                                                    Image("сердце")
-                                                                    //Image(favoriteImages.contains(itemId) ? "зеленое сердце" : "сердце")
-                                                                        .onTapGesture {
-                                                                        }
-                                                                        .scaleEffect(0.5)
-                                                                        .position(x: 165, y: 25)
-                                                                }
-                                                                
-                                                                Text(title)
-                                                                    .padding(.leading, 7)
-                                                                    .foregroundStyle(.black)
-                                                                    .padding(.bottom, 10)
-                                                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                                                    .fontWeight(.medium)
-                                                                
-                                                                Text("\(dateAndTime(date))")
-                                                                    .foregroundColor(.gray)
-                                                                    .padding(.bottom, 5)
-                                                                
-                                                            }
-                                                            .background(Color.white)
-                                                            .cornerRadius(18)
-                                                            .padding(.bottom, 30)
-                                                        }
-                                                    }
+                                    if let imageData = item.image,
+                                       let uiImage = UIImage(data: imageData),
+                                       let itemId = item.uuid,
+                                       let title = item.title,
+                                       let date = item.date {
+                                        NavigationLink {
+                                            ThatView(storage: viewModel.storage, image: item)
+                                        } label: {
+                                            VStack {
+                                                ZStack {
+                                                    createImageView(uiImage: uiImage)
+                                                    createHeartView(item: item, itemId: itemId)
                                                 }
+                                                
+                                                Text(title)
+                                                    .padding(.leading, 7)
+                                                    .foregroundStyle(.black)
+                                                    .padding(.bottom, 10)
+                                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                                    .fontWeight(.medium)
+                                                
+                                                Text("\(dateAndTime(date))")
+                                                    .foregroundColor(.gray)
+                                                    .padding(.bottom, 5)
+                                                
                                             }
+                                            .background(Color.white)
+                                            .cornerRadius(18)
+                                            .padding(.bottom, 30)
                                         }
                                     }
                                 }
@@ -136,6 +121,27 @@ struct HomeView: View {
             }
             .background((Color.colorBG).ignoresSafeArea(.all))
         }
+    }
+    
+    private func createImageView(uiImage: UIImage) -> some View {
+        Image(uiImage: uiImage)
+            .resizable()
+            .aspectRatio(contentMode: .fill)
+            .frame(width: 190, height: 220)
+            .clipShape(CustomRoundedShape())
+            .padding(.bottom, 10)
+    }
+
+    private func createHeartView(item: Item, itemId: UUID) -> some View {
+        Image(item.isLiked ? "зеленое сердце" : "сердце")
+            .onTapGesture {
+                if let index = images.firstIndex(where: { $0.uuid == itemId }) {
+                    images[index].isLiked.toggle()
+                    viewModel.save(item: images[index])
+                }
+            }
+            .scaleEffect(0.5)
+            .position(x: 165, y: 25)
     }
     
     private func dateAndTime(_ date: Date) -> String {

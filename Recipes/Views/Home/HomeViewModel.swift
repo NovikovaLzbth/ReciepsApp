@@ -25,6 +25,14 @@ final class HomeViewModel: ObservableObject {
     func deleteAll() {
         storage.deleteAll()
     }
+    
+    func save(item: Item) {
+        storage.saveToCoreData(item: item)
+    }
+    
+    func fetch() {
+        storage.fetchImages()
+    }
 }
 
 

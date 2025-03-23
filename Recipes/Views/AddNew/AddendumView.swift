@@ -25,7 +25,7 @@ struct AddendumView: View {
     @State private var alertMessage = ""
     
     //Ограничение для заголовка
-    private let characterLimit = 15
+    private let characterLimit = 16
     
     var image: Item?
     

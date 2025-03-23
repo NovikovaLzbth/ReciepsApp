@@ -63,5 +63,37 @@ final class Storage: ObservableObject {
             print("Ошибка при удалении всех изображений: \(error.localizedDescription)")
         }
     }
+    
+    func delete(image: Item) {
+        context.delete(image)
+        
+        do {
+            try context.save()
+        } catch {
+            print("Ошибка удаления изображение")
+        }
+    }
+    
+    func fetchImages() -> [Item] {
+        let fetchRequest: NSFetchRequest<Item> = Item.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \Item.uuid, ascending: true)]
+        
+        var images: [Item] = []
+        
+        do {
+            images = try context.fetch(fetchRequest)
+        } catch {
+            print("Ошибка при загрузке изображений: \(error.localizedDescription)")
+        }
+        return images
+    }
+    
+    func saveToCoreData(item: Item) {
+        do {
+            try context.save()
+        } catch {
+            print("Ошибка сохранения в Core Data: \(error.localizedDescription)")
+        }
+    }
 }
 
