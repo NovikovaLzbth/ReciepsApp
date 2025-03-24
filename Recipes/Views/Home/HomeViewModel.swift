@@ -29,10 +29,6 @@ final class HomeViewModel: ObservableObject {
     func save(item: Item) {
         storage.saveToCoreData(item: item)
     }
-    
-    func fetch() {
-        storage.fetchImages()
-    }
 }
 
 

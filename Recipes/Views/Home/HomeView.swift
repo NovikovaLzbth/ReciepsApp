@@ -80,7 +80,7 @@ struct HomeView: View {
                                                 Text(title)
                                                     .padding(.leading, 7)
                                                     .foregroundStyle(.black)
-                                                    .padding(.bottom, 10)
+                                                    .padding(.bottom, 3)
                                                     .frame(maxWidth: .infinity, alignment: .leading)
                                                     .fontWeight(.medium)
                                                 
@@ -91,7 +91,7 @@ struct HomeView: View {
                                             }
                                             .background(Color.white)
                                             .cornerRadius(18)
-                                            .padding(.bottom, 30)
+                                            .padding(.bottom, 13)
                                         }
                                     }
                                 }
@@ -129,9 +129,9 @@ struct HomeView: View {
             .aspectRatio(contentMode: .fill)
             .frame(width: 190, height: 220)
             .clipShape(CustomRoundedShape())
-            .padding(.bottom, 10)
+            .padding(.bottom, 5)
     }
-
+    
     private func createHeartView(item: Item, itemId: UUID) -> some View {
         Image(item.isLiked ? "зеленое сердце" : "сердце")
             .onTapGesture {

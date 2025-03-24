@@ -26,7 +26,7 @@ struct ContentView: View {
                     .tag("Поиск")
                 HomeView(storage: storage)
                     .tag("Все рецепты")
-                FavView(favoriteImages: storage.favoriteImageIDs, allImages: storage.items)
+                FavView(viewModel: FavvViewModel(storage: storage))
                     .tag("Избранное")
             }
             

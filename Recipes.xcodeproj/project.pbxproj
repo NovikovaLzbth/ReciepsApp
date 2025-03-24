@@ -34,7 +34,6 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
-				Views/Favourites/FavViewModel.swift,
 			);
 			target = 7A85C8FB2D5E49C400EC8ECB /* Recipes */;
 		};
