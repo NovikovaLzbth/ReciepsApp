@@ -15,7 +15,7 @@ struct PersistenceController {
     var viewContext: NSManagedObjectContext {
         container.viewContext
     }
-
+    
     init(inMemory: Bool = false) {
         container = NSPersistentContainer(name: "Recipes")
         if inMemory {

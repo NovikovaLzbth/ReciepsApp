@@ -8,13 +8,31 @@
 import SwiftUI
 
 final class HomeViewModel: ObservableObject {
+    @Published var sortType: SortType = .defaultOrder
     
-    private let imageStorage: ImageStorage
-    
-    init(imageStorage: ImageStorage) {
-        self.imageStorage = imageStorage
+    enum SortType {
+        case defaultOrder
+        case byName
+        case byDate
     }
     
+    let storage: Storage
+    
+    init(storage: Storage) {
+        self.storage = storage
+    }
+    
+    func deleteAll() {
+        storage.deleteAll()
+    }
+    
+    func save(item: Item) {
+        storage.saveToCoreData(item: item)
+    }
+    
+    func fetchLikedImages() {
+        let allImages = storage.fetchImages()
+    }
 }
 
 
