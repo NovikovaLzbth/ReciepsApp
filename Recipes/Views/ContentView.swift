@@ -22,7 +22,7 @@ struct ContentView: View {
     var body: some View {
         VStack {
             TabView(selection: $selectedTab) {
-                SearchView()
+                SearchView(viewModel: SearchViewModel(storage: storage))
                     .tag("Поиск")
                 HomeView(storage: storage)
                     .tag("Все рецепты")

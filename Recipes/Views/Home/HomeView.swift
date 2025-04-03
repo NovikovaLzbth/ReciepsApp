@@ -118,6 +118,9 @@ struct HomeView: View {
                         }
                     }
                 }
+                .refreshable {
+                    viewModel.fetchLikedImages()
+                }
             }
             .background((Color.colorBG).ignoresSafeArea(.all))
         }
